@@ -5,9 +5,9 @@ Aplikasi Backend Chat Realtime berperforma tinggi yang dibangun menggunakan **Go
 
 ## ✨ Fitur Utama
 * **User Authentication**: Register & Login menggunakan JWT (JSON Web Token).
-* **Realtime Communication**: Mendukung pengiriman pesan instan (WebSocket ready).
+* **Realtime Communication**: Pengiriman pesan instan secara dua arah menggunakan WebSockets (Gorilla WebSocket).
 * **Secure**: Enkripsi password menggunakan Bcrypt.
-* **Database Migration**: Otomatis membuat tabel saat pertama kali dijalankan.
+* **Database Migration**: Skema database otomatis dikelola saat aplikasi pertama kali dijalankan di Docker.
 * **Dockerized**: Siap dijalankan di server mana pun hanya dengan satu perintah.
 
 ## 🛠️ Teknologi yang Digunakan
@@ -24,3 +24,53 @@ Pastikan kamu sudah menginstall **Docker** dan **Docker Compose** di laptopmu.
    ```bash
    git clone [https://github.com/AgustiBayu/realtime-chatapp.git](https://github.com/AgustiBayu/realtime-chatapp.git)
    cd realtime-chatapp
+2. **Jalankan dengan Docker**
+Cukup jalankan perintah berikut, Docker akan mengatur Database PostgreSQL dan Backend secara otomatis:
+   ```bash
+   docker-compose up --build
+3. **Akses Aplikasi** akan berjalan pada: http://localhost:8080
+
+## 🧪 Cara Pengujian (Testing)
+1. **Registrasi User Baru**
+Sebelum bisa chatting, kamu harus membuat akun terlebih dahulu.
+* **Method:** POST
+* **Url:**
+   ``` bash 
+   http://localhost:8080/v1/api/auth/register
+* **Json Body:**
+   ``` bash 
+   {
+    "name":"",
+    "email":"",
+    "password":""
+   }
+2. **Login (Mendapatkan Token)**
+Login digunakan untuk mendapatkan JWT Token yang diperlukan untuk mengakses fitur chat.
+* **Method:** POST
+* **Url:**
+   ``` bash 
+   http://localhost:8080/v1/api/auth/login
+* **Json Body:**
+   ``` bash 
+   {    		
+    "email":"",
+    "password":""
+   }
+* **Output:** Copy nilai token yang muncul di response untuk digunakan pada langkah berikutnya.
+3. **Mengambil Riwayat Chat**
+* **Method:** GET
+* **Url:**
+   ```bash 
+   http://localhost:8080/messages/history?receiver_id=1
+* **Authorization:** Pilih tab Auth, pilih Bearer Token, lalu paste token hasil login tadi.
+4. **Mencoba WebSocket (Realtime)**
+* **Type:** WebSocket Request
+* **Url:**
+   ``` bash
+   ws://localhost:8080/messages/ws?token=PASTE_TOKEN_DISINI
+* **Message (JSON):** 
+   ``` bash
+   {
+    "receiver_id": 2,
+    "content": "Halo, ini pesan realtime via Channels!"
+   }

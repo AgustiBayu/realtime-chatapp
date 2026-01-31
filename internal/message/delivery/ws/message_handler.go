@@ -24,7 +24,7 @@ type MessageHandlerImpl struct {
 	hub     *socket.Hub
 }
 
-func NewMessageHandler(u domain.MessageUsecase, h *socket.Hub) domain.MessageHandler {
+func NewMessageHandler(u domain.MessageUsecase, h *socket.Hub) *MessageHandlerImpl {
 	return &MessageHandlerImpl{
 		Usecase: u,
 		hub:     h,

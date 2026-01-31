@@ -3,8 +3,6 @@ package domain
 import (
 	"context"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 type Message struct {
@@ -41,11 +39,6 @@ type MessageRepository interface {
 type MessageUsecase interface {
 	SendMessage(ctx context.Context, req MessageRequest, senderID int) (MessageResponse, error)
 	GetChatHistory(ctx context.Context, senderID, receiverID int) ([]MessageResponse, error)
-}
-
-type MessageHandler interface {
-	GetChatHistory(c *gin.Context)
-	Connect(c *gin.Context)
 }
 
 func ToMessageResponse(msg Message, senderName, receiverName string) MessageResponse {
